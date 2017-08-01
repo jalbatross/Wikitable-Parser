@@ -1,4 +1,22 @@
+<head>
+    <!--- Angular, jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+    
+    <!-- Tether -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <!-- Bootstrap 4-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+
 <form method = "GET">
-    <p><input type="text" id ="url" placeholder="Wikipedia URL" required></p>
-    <p><input type="submit" value="Get tables"></p>
+    <div class="form-group">
+        <label for="example-url-input" class="col-2 col-form-label">URL</label>
+        <div class="col-10">
+            <input class="form-control" type="url" placeholder ="https://en.wikipedia.org/wiki/List_of_Latin_names_of_countries" required>
+            <button type="submit" class="btn btn-info">Get Tables</button>
+        </div>
+    </div>
 </form>
