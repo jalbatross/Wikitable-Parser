@@ -5,6 +5,8 @@
  * each column title should be found in <th> HTML tags
  * @param  {array} tr      array of first <TR> tag below the wikitable class
  * @return {array}         array of column titles
+ *
+ * by @MichaelTrann(Michael Tran) Aug 3, 2017
  */
 function getColumnTitles(tr) {
 console.log("begin");    
