@@ -27,7 +27,7 @@ function parseTd(td) {
         }
         info += td.charAt(i);
     }
-    
+
     return info;
 }
 

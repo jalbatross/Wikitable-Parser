@@ -76,7 +76,28 @@ function parse(webpageStr) {
     //our column titles. Parse each subsequent <tr> element by assigning
     //the information in each <td> to the appropriate WikiData object
     //in returnArray.
+    for (let i = closingTrIndex; i < endIndex; i++) {
+        //Find a <tr> element
+        let endTrIndex = wikitable.indexOf("</tr>", i + 1);
+        console.log(endTrIndex, ' was endTrIndex');
+        console.log(i, ' was i');
+        let testTr = wikitable.slice(i, endTrIndex);
+        console.log('test tr: ', testTr);
+        let tr = parseTagNoTag(wikitable.slice(i, endTrIndex),"<tr>","</tr>");
+        console.log("our tr: " , tr);
 
+        //Find and parse numColumns td objects in the tr
+        for (let j = 0; j < returnArray.length; j++) {
+            let td = parseTagGuts(parseTagWithTag(tr, "<td>","</td>"));
+            console.log('pushing ', td, ' into returnArray column ', returnArray[i].title);
+            returnArray[j].data.push(td);
+            tr = tr.slice("</td>");
+        }
+
+        for (let k = 0; k < returnArray.length; k++) {
+            console.log(returnArray[k].title, ' has ', returnArray[k].data.length, ' entries');
+        }
+        
     }
 
     console.log(columnTitles);
@@ -140,6 +161,83 @@ function getColumnTitles(tr) {
   return retArray;
 }
 
+/**
+ * [parseTagNoTag description]
+ * @param  {string} sourceCode [description]
+ * @param  {string} openingTag [description]
+ * @param  {string} closingTag [description]
+ * @return {string}            [description]
+ */
+function parseTagNoTag(sourceCode, openingTag, closingTag) {
+console.log("begin");    
+//Search for the beginning index where the tag is found
+    var beginIndex = sourceCode.search(openingTag);
+    //If beginIndex is -1, then there is no tag
+    if ( beginIndex === -1){
+        return alert("No tag found");
+    }
+    beginIndex += openingTag.length;
+    endIndex = sourceCode.search(closingTag);
+    //If endIndex is -1, then there is no closing tag
+    if ( endIndex === -1){
+        return alert("No closing tag");
+    }
+    var returnString = "";
+    returnString = sourceCode.slice(beginIndex, endIndex);
+    return returnString;   
+}
+
+/**
+ * [parseTagWithTag description]
+ * @param  {string} sourceCode [description]
+ * @param  {string} openingTag [description]
+ * @param  {string} closingTag [description]
+ * @return {string}            [description]
+ */
+function parseTagWithTag(sourceCode, openingTag, closingTag) {
+console.log("begin");    
+//Search for the beginning index where the tag is found
+    var beginIndex = sourceCode.search(openingTag);
+    //If beginIndex is -1, then there is no tag
+    if ( beginIndex === -1){
+        return alert("No tag found");
+    }
+    endIndex = sourceCode.search(closingTag);
+    endIndex += closingTag.length;
+    //If endIndex is -1, then there is no closing tag
+    if ( endIndex === -1){
+        return alert("No closing tag");
+    }
+    var returnString = "";
+    returnString = sourceCode.slice(beginIndex, endIndex);
+    return returnString;   
+}
+
+/**
+ * An html string with tags
+ * @param  {string} taggedHtmlElement [description]
+ * @return {string}                   [description]
+ */
+function parseTagGuts(taggedHtmlElement) {
+    console.log(taggedHtmlElement.length);
+
+    var beginChop = 0;
+
+    var info = "";
+    for (var i = 0; i < td.length; i++) {
+        if (taggedHtmlElement.charAt(i) === '<') {
+            beginChop = i;
+            while (taggedHtmlElement.charAt(beginChop) !== '>') {
+                beginChop++;
+            }
+            i = beginChop;
+            continue;
+        }
+        info += taggedHtmlElement.charAt(i);
+    }
+
+    return info;
+}
 
 //------End Function Declarations------
 
