@@ -69,7 +69,7 @@ function parse(webpageStr) {
 
     //Initialize returnArray with numColumns WikiData objects
     for (var i = 0; i < numColumns; i++) {
-        returnArray[i] = new WikiData(columnTitles[i], null);
+        returnArray[i] = new WikiData(columnTitles[i], []);
     }
 
     //TODO: Find the next <tr> after the opening <tr></tr> which contained
@@ -79,25 +79,31 @@ function parse(webpageStr) {
     for (let i = closingTrIndex; i < endIndex; i++) {
         //Find a <tr> element
         let endTrIndex = wikitable.indexOf("</tr>", i + 1);
+
+        if (endTrIndex === -1) {
+            break;
+        }
         console.log(endTrIndex, ' was endTrIndex');
         console.log(i, ' was i');
-        let testTr = wikitable.slice(i, endTrIndex);
-        console.log('test tr: ', testTr);
-        let tr = parseTagNoTag(wikitable.slice(i, endTrIndex),"<tr>","</tr>");
+        let testTr = wikitable.slice(i + 5, endTrIndex + 5);
+        let tr = parseTagNoTag(testTr,"<tr>","</tr>");
         console.log("our tr: " , tr);
 
         //Find and parse numColumns td objects in the tr
-        for (let j = 0; j < returnArray.length; j++) {
+        for (let j = 0; j < numColumns; j++) {
+            console.log('here');
             let td = parseTagGuts(parseTagWithTag(tr, "<td>","</td>"));
-            console.log('pushing ', td, ' into returnArray column ', returnArray[i].title);
-            returnArray[j].data.push(td);
-            tr = tr.slice("</td>");
+            console.log('pushing ', td, ' into returnArray column ', returnArray[j].title);
+            (returnArray[j].data).push(td);
+            let endTd = tr.search("</td>") + 5;
+            tr = tr.slice(endTd);
+            console.log('updated tr: ' , tr);
         }
 
         for (let k = 0; k < returnArray.length; k++) {
             console.log(returnArray[k].title, ' has ', returnArray[k].data.length, ' entries');
         }
-        
+        i = endTrIndex;
     }
 
     console.log(columnTitles);
@@ -224,7 +230,7 @@ function parseTagGuts(taggedHtmlElement) {
     var beginChop = 0;
 
     var info = "";
-    for (var i = 0; i < td.length; i++) {
+    for (var i = 0; i < taggedHtmlElement.length; i++) {
         if (taggedHtmlElement.charAt(i) === '<') {
             beginChop = i;
             while (taggedHtmlElement.charAt(beginChop) !== '>') {
@@ -235,7 +241,6 @@ function parseTagGuts(taggedHtmlElement) {
         }
         info += taggedHtmlElement.charAt(i);
     }
-
     return info;
 }
 
